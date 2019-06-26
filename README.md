@@ -26,7 +26,7 @@ addSix(21); // returns 27
 ## How would you use a closure to create a private counter?
 
 ## Explain event delegation 
-#### (Instead of binding a handler to each of a similar `<li>` in an app, what is the better way)
+#### (Instead of binding a click handler to each `<li>` in a container, what is the better way)
 ```
 document.addEventListener('DOMContentLoaded', function() {
   
