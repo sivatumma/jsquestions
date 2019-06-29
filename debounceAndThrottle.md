@@ -6,10 +6,14 @@ The notion of throttling and debouncing gives developers specific control over t
 
 Having greater control over the rate at which a function is executed can be particularly useful in situations where functions are being executed excessively and in some cases unnecessarily. You may have come across scenarios like this when binding to mouse movement and window events such as scrolling.
 
-What’s the difference between throttling and debouncing?
-Throttling — If you think of a car throttle. The amount you push your foot down limits the amount of gas going into the engine. In this context, we want to limit the amount that a function is executed. Whereas in a car, we limit the amount of gas relative to how far your foot is down, in JavaScript, we are limiting the amount a function is executed over a time period. I find a better analogy to be either how the lottery numbers are drawn, say one every five seconds or a greater one being ordering drinks at a bar. Consider the latter, you go to a bar and the barman has a policy of only allowing you to order a drink every 45 minutes or things get crazy. You order a drink in the first minute and he hands one over. You then try and order one every minute thereafter being denied by the barman until the 45th minute when the then tired barman hands over the next drink. You won’t get another drink for another 45 minutes. Sometimes with throttling you may want one last invocation to happen after the throttle is over, this being one of the denied invocations. Referring to the last analogy, imagine you order a drink in the 15th minute and get denied but in the 45th minute, you don’t order but the barman sends a waiter over with the drink from that 15th minute order because he feels sorry for you 😁
-Debouncing—Debouncing works a little differently and can be a little harder to explain (if anyone has a good analogy, please leave a note). With debouncing, it’s almost like we are saying “Hey, I’m not going to execute that function until I know there are no more changes to be made”. It is almost like we don’t execute our function until everyone else is happy and we’re clear to proceed. Imagine ordering food at a restaurant. You start listing off items to the waiter/waitress and at the end they ask “Is that everything?” If it is, they leave you to it and go get your food and drinks sorted out etc. If it isn’t, you add to the order and then they ask you again until they are clear to proceed (there are some great responses left at the end of this article with some further explanations/analogies).
-Examples
+## What’s the difference between throttling and debouncing?
+### Throttling
+If you think of a car throttle. The amount you push your foot down limits the amount of gas going into the engine. In this context, we want to limit the amount that a function is executed. Whereas in a car, we limit the amount of gas relative to how far your foot is down, in JavaScript, we are limiting the amount a function is executed over a time period. I find a better analogy to be either how the lottery numbers are drawn, say one every five seconds or a greater one being ordering drinks at a bar. Consider the latter, you go to a bar and the barman has a policy of only allowing you to order a drink every 45 minutes or things get crazy. You order a drink in the first minute and he hands one over. You then try and order one every minute thereafter being denied by the barman until the 45th minute when the then tired barman hands over the next drink. You won’t get another drink for another 45 minutes. Sometimes with throttling you may want one last invocation to happen after the throttle is over, this being one of the denied invocations. Referring to the last analogy, imagine you order a drink in the 15th minute and get denied but in the 45th minute, you don’t order but the barman sends a waiter over with the drink from that 15th minute order because he feels sorry for you 😁
+
+### Debouncing
+Debouncing works a little differently and can be a little harder to explain (if anyone has a good analogy, please leave a note). With debouncing, it’s almost like we are saying “Hey, I’m not going to execute that function until I know there are no more changes to be made”. It is almost like we don’t execute our function until everyone else is happy and we’re clear to proceed. Imagine ordering food at a restaurant. You start listing off items to the waiter/waitress and at the end they ask “Is that everything?” If it is, they leave you to it and go get your food and drinks sorted out etc. If it isn’t, you add to the order and then they ask you again until they are clear to proceed (there are some great responses left at the end of this article with some further explanations/analogies).
+
+### Examples
 An example for when to throttle a function execution might be when we are binding some logic to a button click. We may have a button that increases the quantity of an item in a shopping basket and we want to stop the user from being able to click the button frantically to increase the quantity so we only allow one click per second. Most shopping basket quantities have an input field so this would be redundant any how. Alternatively we may bind some function to mouse movement and only want to execute every 250ms that the cursor is moved.
 For debouncing, we could have some auto save feature in our application. With auto save on the application tries to save the state of our application every time the user makes an update or has some interaction. It waits 5 seconds to make sure no other updates or interactions are made before saving the state else it records the new state and repeats the process.
 Implementing throttle and debounce
@@ -38,7 +42,8 @@ Lastly, we integrate our debounce function into our event handling assignment.
 
 ```debounceBtn.addEventListener('click', debounce(function() {
   console.info('Hey! It is', new Date().toUTCString());
-}, 3000));```
+}, 3000));
+```
 
 In this example we are debouncing the call by 3 seconds at which point we print the date.
 
@@ -62,11 +67,14 @@ const throttle = (func, limit) => {
 ```
 
 The first invocation of our function will execute and sets the limit period inThrottle. We can invoke our function during this period but it will not be executed until the throttle period has passed. Once it has passed, the next invocation will be executed and the process repeats
+
 ```ThrottleBtn.addEventListener('click', throttle(function() {
   return console.log('Hey! It is', new Date().toUTCString());
-}, 1000));```
+}, 1000));
+```
 
 But what about our last invocation? If it’s in the limit period it will be ignored and maybe that’s not what we want. To put this into context, if we bound to mouse movement for say a drag or resize event and missed out the last invocation we would never get the desired result as the final invocation would always be ignored. So we need to catch this and execute it after the limit period (Thanks to worldwar for questioning the previous implementation which didn’t always work 100% as expected).
+
 ```
 const throttle = (func, limit) => {
   let lastFunc
