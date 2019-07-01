@@ -17,7 +17,7 @@ for (var i = 0; i < 3; i++) {
   setTimeout(function() { alert(i); }, 1000 + i);
 }
 ```
-## Write a function that would allow you to do this
+## Write a function createBase(), that would allow you to do this
 ```
 var addSix = createBase(6);
 addSix(10); // returns 16
